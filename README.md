@@ -14,7 +14,7 @@
 
     PIR OUT腳 => D2
     喇叭      => D5
-    LED       > D6  (+ 1K電阻)
+    LED       => D6  (+ 1K電阻)
 
 ### 於 5/4 初版上線
     
@@ -24,3 +24,14 @@
 
     檔案      : all_3.ino 
     修正部分  :  時間寫法 修正為 millis() 數學運算 寫法 &  上班鈴聲錯誤
+	
+### 於 5/9 三版上線
+
+    檔案      : all_4.ino 
+    修正部分  :  修正過一天後時間錯誤
+	
+### 播mp3版
+
+	參考資料: https://github.com/earlephilhower/ESP8266Audio
+	
+	
