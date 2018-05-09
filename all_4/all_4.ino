@@ -1,3 +1,7 @@
+/*
+ * 注意 NodeMCU 開發板上LED 預設 low為亮燈
+ */
+
 #include <Wire.h>
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
@@ -11,7 +15,7 @@ const char *password = "22592566";
 
 //定義PIR
 const int PIRout= D2;
-const int LED= D6;
+const int LED= D4;
 int i =0;
 
 // 定義音樂
@@ -35,6 +39,9 @@ void run_time(){
     NOW_HOUR = NOW /3600          ; hours   = NOW_HOUR;
     NOW_MIN  = ((NOW %3600 )/60)  ; minutes = NOW_MIN ;
     NOW_SEC  = NOW % 60           ; seconds = NOW_SEC ;
+    digitalWrite(LED,LOW);
+    delay(100);
+    digitalWrite(LED,HIGH);
   }
   timeLast = timeNow;
   SECOND = ( (hours*3600 + minutes*60 +seconds) - millis()/1000 );
@@ -59,11 +66,12 @@ void print_Date(){
 }
 
 void play(){
+    digitalWrite(LED,HIGH);
     for (int thisNote = 0; thisNote < 4; thisNote++) {
     // 在 pinD5 上輸出聲音，每個音階響 0.5 秒
     if( (hours >= 6 && hours <= 9))
     {tone(D5, note_UP[thisNote], duration[thisNote]);}
-    if( (hours >= 17 && hours <= 23))
+    if( (hours >= 17 && hours <= 23) )
     {tone(D5, note_DOWN[thisNote], duration[thisNote]);}
     // 間隔一段時間後再播放下一個音階
     delay(200);
@@ -77,6 +85,7 @@ void setup(){
   Serial.begin(57600);
   Serial.setTimeout(5000);
   Wire.begin(D4,D3);
+  
   pinMode(PIRout,INPUT);
   pinMode(LED,OUTPUT);
   Serial.println("");
@@ -85,13 +94,14 @@ void setup(){
   while ( WiFi.status() != WL_CONNECTED ) {
     delay ( 500 );
     Serial.print ( "." );
+    digitalWrite(LED,LOW);
   }
-  Serial.println ( "START CONNECT" );
+  Serial.println ( "START CONNECT" ); 
+  digitalWrite(LED,HIGH);
   timeClient.begin();
   delay(1000);
+  
   set_Date();
-  while( YEAR == "1970") {set_Date();digitalWrite(LED,HIGH);}
-  digitalWrite(LED,LOW);
 }
 
 void loop() {
@@ -101,18 +111,16 @@ void loop() {
   if( hours == 1 && (minutes == 1 || minutes == 2) ) {
     Serial.println("set_time");
     set_Date();
-    digitalWrite(LED,HIGH);
-    delay(1000*10);
     digitalWrite(LED,LOW);
+    delay(1000*10);
+    digitalWrite(LED,HIGH);
   }
   else{
-      while( (hours >= 6 && hours <= 9) || (hours >= 17 && hours <= 23))
-       {
+      while( (hours >= 6 && hours <= 9) || (hours >= 17 && hours <= 23) ){
           int val=digitalRead(PIRout);  //讀取 PIR 輸出
           if (val == HIGH) {   //PIR 有偵測到時 : LED 閃一下
           play();
-          delay(1000);
-          } 
+          delay(1000);} 
           break;
         }   
   print_Date();
