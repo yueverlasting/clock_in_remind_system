@@ -33,4 +33,11 @@
 
 	參考資料: https://github.com/earlephilhower/ESP8266Audio
 	
-	
+### 於 5/9 三版上線
+
+    檔案      : all_5.ino 
+    修正部分  :  增設LCD顯示器 用以確認時間是否正確
+	PIR OUT腳 => D4
+    喇叭      => D5
+	LCD-SDA	  => D2
+	LCD-SCL	  => D1
