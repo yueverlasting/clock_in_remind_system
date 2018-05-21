@@ -26,6 +26,8 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 //定義wifi
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, 28800);
+//const char *ssid     = "Yueverlasting";
+//const char *password = "10241228";
 const char *ssid     = "TVTC-MOA";
 const char *password = "22592566";
 
@@ -72,6 +74,7 @@ void set_Date() {
   if (YEAR == "1970") {
     set_Date();
   }
+  WiFi.mode(WIFI_OFF);
 }
 
 void print_Date() {
@@ -152,7 +155,6 @@ void play() {
 
 void setup() {
   lcd.begin();
-  lcd.backlight();
   lcd.print("Hello !");
 
   Serial.begin(57600);
@@ -172,6 +174,7 @@ void loop() {
   timeNow = millis() / 1000 ; // millis is the function i have mentioned above
   if (timeNow != timeLast) {
     run_time();
+    lcd.setCursor( 0, 0 ); lcd.print( "Running--" );
   }
 
   if ( hours == 1 && (minutes == 1 || minutes == 2) ) {
@@ -187,6 +190,7 @@ void loop() {
       delay(1);
       int val = digitalRead(PIRout); //讀取 PIR 輸出
       if (val == HIGH) {   //PIR 有偵測到時
+        lcd.backlight();
         play();
         delay(1000);
       }
