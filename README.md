@@ -1,4 +1,6 @@
 # clock_in_remind_system
+# 已結案
+## 詳細規格文件待補
 
 ## 上下班打卡提醒裝置
 
